@@ -7,6 +7,7 @@ import java.util.Random;
 import java.util.Set;
 import java.util.concurrent.ThreadLocalRandom;
 
+import com.molean.folia.adapter.Folia;
 import com.xzavier0722.mc.plugin.slimefun4.storage.util.StorageCacheUtils;
 import me.mrCookieSlime.Slimefun.api.BlockStorage;
 import org.bukkit.Effect;
@@ -155,7 +156,7 @@ public class PlantsListener implements Listener {
                         }
                     }
                     else {
-                        plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, () -> pasteTree(e, x, z, tree));
+                        Folia.getScheduler().scheduleSyncDelayedTask(plugin, e.getChunk().getBlock(0, 0, 0).getLocation(), () -> pasteTree(e, x, z, tree), 1);
                     }
                 }
             }
@@ -242,7 +243,7 @@ public class PlantsListener implements Listener {
                         current.setType(Material.OAK_LEAVES, false);
                     }
                     else {
-                        plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, () -> current.setType(Material.OAK_LEAVES));
+                        Folia.getScheduler().scheduleSyncDelayedTask(plugin, current.getLocation(), () -> current.setType(Material.OAK_LEAVES), 1);
                     }
                     break;
                 case FRUIT, ORE_PLANT, DOUBLE_PLANT:
@@ -254,13 +255,13 @@ public class PlantsListener implements Listener {
                         PlayerHead.setSkin(current, PlayerSkin.fromHashCode(berry.getTexture()), true);
                     }
                     else {
-                        plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, () -> {
+                        Folia.getScheduler().scheduleSyncDelayedTask(plugin, current.getLocation(), () -> {
                             current.setType(Material.PLAYER_HEAD);
                             Rotatable s = (Rotatable) current.getBlockData();
                             s.setRotation(faces[random.nextInt(faces.length)]);
                             current.setBlockData(s, false);
                             PlayerHead.setSkin(current, PlayerSkin.fromHashCode(berry.getTexture()), true);
-                        });
+                        }, 1);
                     }
                     break;
                 default:
@@ -295,7 +296,7 @@ public class PlantsListener implements Listener {
                 dropFruitFromTree(e.getBlock());
             }
 
-            if (e.getBlock().getType() == Material.GRASS) {
+            if (e.getBlock().getType() == Material.GRASS_BLOCK) {
                 if (!ExoticGarden.getGrassDrops().keySet().isEmpty() && e.getPlayer().getGameMode() != GameMode.CREATIVE) {
                     Random random = ThreadLocalRandom.current();
 
@@ -380,7 +381,7 @@ public class PlantsListener implements Listener {
 
             if (item instanceof BonemealableItem && ((BonemealableItem) item).isBonemealDisabled()) {
                 e.setCancelled(true);
-                b.getWorld().spawnParticle(Particle.VILLAGER_ANGRY, b.getLocation().clone().add(0.5, 0, 0.5), 4);
+                b.getWorld().spawnParticle(Particle.ANGRY_VILLAGER, b.getLocation().clone().add(0.5, 0, 0.5), 4);
                 b.getWorld().playSound(b.getLocation(), Sound.ENTITY_VILLAGER_NO, 1, 1);
             }
         }

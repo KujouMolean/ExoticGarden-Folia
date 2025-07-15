@@ -9,4 +9,7 @@ main: io.github.thebusybiscuit.exoticgarden.ExoticGarden
 
 depend:
 - Slimefun
+- FoliaAdapter
 - GuizhanLibPlugin
+
+folia-supported: true
